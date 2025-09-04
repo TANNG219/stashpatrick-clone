@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Mail, Lock } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -17,6 +15,7 @@ export default function RegisterPage() {
     captcha: ""
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,36 +29,30 @@ export default function RegisterPage() {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      setMessage("Passwords do not match");
       return;
     }
 
     if (formData.captcha.toLowerCase() !== "g4j8k") {
-      toast.error("Invalid captcha. Please try again.");
+      setMessage("Invalid captcha. Please try again.");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const { data, error } = await authClient.signUp.email({
-        email: formData.email,
-        name: formData.name,
-        password: formData.password
-      });
-
-      if (error?.code) {
-        const errorMap = {
-          USER_ALREADY_EXISTS: "Email already registered"
-        };
-        toast.error(errorMap[error.code as keyof typeof errorMap] || "Registration failed");
-        return;
-      }
-
-      toast.success("Account created! Please check your email to verify.");
-      router.push("/login?registered=true");
+      // Simulate registration process
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setMessage("Account created successfully! You can now login.");
+      
+      // Redirect to login page after 2 seconds
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+      
     } catch (error) {
-      toast.error("Registration failed. Please try again.");
+      setMessage("Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -83,6 +76,17 @@ export default function RegisterPage() {
             <h1 className="text-2xl font-semibold text-gray-800 mb-2">Create Account</h1>
             <p className="text-gray-600">Join us today</p>
           </div>
+
+          {/* Success/Error Message */}
+          {message && (
+            <div className={`mb-4 p-3 rounded-md text-sm ${
+              message.includes("successfully") 
+                ? "bg-green-100 text-green-700 border border-green-200" 
+                : "bg-red-100 text-red-700 border border-red-200"
+            }`}>
+              {message}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Input */}
