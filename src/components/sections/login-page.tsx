@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { User, Lock } from 'lucide-react';
 
 const LoginPage = () => {
@@ -95,9 +96,9 @@ const LoginPage = () => {
                             {/* Create Account Link */}
                             <p className="pt-3 text-center text-sm text-[#333333]">
                                 Not a member?{' '}
-                                <a href="https://stashpatricks.ru/register.php" className="text-primary ml-1">
+                                <Link href="/register" className="text-primary ml-1">
                                     Create an Account
-                                </a>
+                                </Link>
                             </p>
                         </form>
                     </div>
