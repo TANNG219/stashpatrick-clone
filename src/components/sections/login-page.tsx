@@ -2,9 +2,45 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { User, Lock } from 'lucide-react';
 
 const LoginPage = () => {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        login: '',
+        password: '',
+        captcha: '',
+        rememberMe: false
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        try {
+            // Simulate login process
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Redirect to dashboard
+            router.push('/dashboard');
+        } catch (error) {
+            console.error('Login failed:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#A5C663] to-[#8DB859] font-sans p-4">
             <div className="relative pt-[96px] w-full max-w-[368px]">
@@ -23,7 +59,7 @@ const LoginPage = () => {
                 {/* Login Card */}
                 <div className="relative bg-card text-card-foreground rounded-[12px] shadow-[0_4px_8px_0_rgba(0,0,0,0.06),0_0_4px_0_rgba(0,0,0,0.14)] w-full">
                     <div className="p-6">
-                        <form className="w-[320px] mx-auto" onSubmit={(e) => e.preventDefault()}>
+                        <form className="w-[320px] mx-auto" onSubmit={handleSubmit}>
                             {/* Title */}
                             <h1 className="text-center text-2xl font-semibold text-[#424344] pb-[30px]">
                                 Login
@@ -36,6 +72,9 @@ const LoginPage = () => {
                                 </span>
                                 <input
                                     type="text"
+                                    name="login"
+                                    value={formData.login}
+                                    onChange={handleInputChange}
                                     placeholder="Login"
                                     className="w-full h-[45px] bg-[#f5f5f5] border border-input rounded-[5px] pl-[54px] pr-[30px] text-[15px] focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground"
                                 />
@@ -48,6 +87,9 @@ const LoginPage = () => {
                                 </span>
                                 <input
                                     type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
                                     placeholder="Password"
                                     className="w-full h-[45px] bg-[#f5f5f5] border border-input rounded-[5px] pl-[54px] pr-[30px] text-[15px] focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground"
                                 />
@@ -57,6 +99,9 @@ const LoginPage = () => {
                             <div className="relative mb-4">
                                 <input
                                     type="text"
+                                    name="captcha"
+                                    value={formData.captcha}
+                                    onChange={handleInputChange}
                                     placeholder="Captcha"
                                     className="w-full h-[45px] bg-[#f5f5f5] border border-input rounded-[7px] py-2 px-4 text-[18px] focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring placeholder:text-muted-foreground"
                                 />
@@ -76,6 +121,9 @@ const LoginPage = () => {
                                 <input
                                     type="checkbox"
                                     id="remember-me"
+                                    name="rememberMe"
+                                    checked={formData.rememberMe}
+                                    onChange={handleInputChange}
                                     className="h-[13px] w-[13px] rounded-sm border-gray-300 text-primary focus:ring-primary accent-primary"
                                 />
                                 <label htmlFor="remember-me" className="ml-2 block text-sm text-[#495057] select-none">
@@ -87,9 +135,10 @@ const LoginPage = () => {
                             <div className="mt-4">
                                 <button
                                     type="submit"
-                                    className="w-full h-[45px] bg-primary text-primary-foreground text-base font-medium rounded-[6px] hover:bg-primary/90 transition-colors"
+                                    disabled={isLoading}
+                                    className="w-full h-[45px] bg-primary text-primary-foreground text-base font-medium rounded-[6px] hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Login
+                                    {isLoading ? "Logging in..." : "Login"}
                                 </button>
                             </div>
 
