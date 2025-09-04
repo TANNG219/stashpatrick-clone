@@ -11,8 +11,7 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
-    captcha: ""
+    confirmPassword: ""
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -30,11 +29,6 @@ export default function RegisterPage() {
     
     if (formData.password !== formData.confirmPassword) {
       setMessage("Passwords do not match");
-      return;
-    }
-
-    if (formData.captcha.toLowerCase() !== "g4j8k") {
-      setMessage("Invalid captcha. Please try again.");
       return;
     }
 
@@ -177,30 +171,6 @@ export default function RegisterPage() {
                   placeholder="Confirm your password"
                 />
               </div>
-            </div>
-
-            {/* Captcha */}
-            <div>
-              <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-2">
-                Captcha
-              </label>
-              <div className="flex items-center space-x-3 mb-2">
-                <img 
-                  src="/captcha.png" 
-                  alt="Captcha" 
-                  className="h-12 border border-gray-300 rounded"
-                />
-              </div>
-              <input
-                id="captcha"
-                name="captcha"
-                type="text"
-                required
-                value={formData.captcha}
-                onChange={handleInputChange}
-                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-gray-50"
-                placeholder="Enter captcha code"
-              />
             </div>
 
             {/* Create Account Button */}
